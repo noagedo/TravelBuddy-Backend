@@ -15,17 +15,18 @@ GET http://localhost:3000/posts
 ###
 
 # Get a post by ID
-GET http://localhost:3000/posts/67443b63403364e20bdcb8ad
+GET http://localhost:3000/posts/6737612e9eae9436fc809d5c
+
 
 ###
 
-GET http://localhost:3000/sender?sender=Noa
-
+GET http://localhost:3000/posts?sender=Noa
+Content-Type: application/json
 
 ###
 
 # Update a post by ID
-PUT http://localhost:3000/posts/67443b63403364e20bdcb8ad
+PUT http://localhost:3000/posts/6746e466e0ccea1630c35d01
 Content-Type: application/json
 
 {
@@ -34,11 +35,12 @@ Content-Type: application/json
 }
 
 ###
+
 POST http://localhost:3000/comments
 Content-Type: application/json
 
 {
-  "postId": "64b1f69b4f1a25673e18b521",
+  "postId": "64b1f69b4f1a25673e18b523",
   "content": "This is a test comment.",
   "sender": "Yuvalben ",
   "createdAt": "2021-08-01T12:00:00.000Z"
@@ -52,11 +54,11 @@ GET http://localhost:3000/comments
 
 # Get comments by post ID
 GET http://localhost:3000/comments/64b1f69b4f1a25673e18b521
-
+Content-Type: application/json
 ###
 
 # Update a comment
-PUT http://localhost:3000/comments/673b5543c2a46149f9188f7f
+PUT http://localhost:3000/comments/6746e6f6e0ccea1630c35d19
 Content-Type: application/json
 
 {
@@ -66,4 +68,4 @@ Content-Type: application/json
 
 ###
 # Delete a comment
-DELETE http://localhost:3000/comments/673d9786bbfbbd848bdfb1ff
+DELETE http://localhost:3000/comments/6746e6f6e0ccea1630c35d19
