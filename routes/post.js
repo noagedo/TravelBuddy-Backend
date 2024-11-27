@@ -8,4 +8,6 @@ router.get("/", postController.getAllPosts);
 
 router.get("/:postId", postController.getPostById);
 
+router.get("/sender", postController.getPostBySender); 
+
 module.exports = router;

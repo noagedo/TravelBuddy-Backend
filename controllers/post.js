@@ -30,8 +30,19 @@ const getPostById = async (req, res) => {
     }
 };
 
+const getPostBySender = async (req, res) => {
+    try {
+        const posts = await Post.find({ sender: req.query.sender });
+        if (posts.length > 0) res.send(posts);
+        else res.status(404).send("No posts found for this sender");
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
+
 module.exports = {
     addNewPost,
     getAllPosts,
     getPostById,
+    getPostBySender,
 };
