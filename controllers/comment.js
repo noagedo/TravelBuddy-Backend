@@ -29,9 +29,18 @@ const getCommentsByPostId = async (req, res) => {
     }
 };
 
+const updateComment = async (req, res) => {
+    try {
+        const comment = await Comment.findByIdAndUpdate(req.params.commentId, req.body, { new: true });
+        res.json(comment);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
 
 module.exports = {
     createComment,
     getAllComments,
     getCommentsByPostId,
+    updateComment,
 };
