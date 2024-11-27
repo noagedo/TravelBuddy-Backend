@@ -10,7 +10,17 @@ const addNewPost = async (req, res) => {
     }
 };
 
+const getAllPosts = async (req, res) => {
+    try {
+        const posts = await Post.find();  
+        res.send(posts);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
+
 
 module.exports = {
-    addNewPost
+    addNewPost,
+    getAllPosts,
 };
