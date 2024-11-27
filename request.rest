@@ -44,3 +44,8 @@ Content-Type: application/json
   "createdAt": "2021-08-01T12:00:00.000Z"
 
 }
+###
+# Get all comments
+GET http://localhost:3000/comments
+
+###
