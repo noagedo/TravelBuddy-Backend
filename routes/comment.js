@@ -9,5 +9,7 @@ router.get("/", commentController.getAllComments);
 
 router.get("/:postId", commentController.getCommentsByPostId);
 
+router.put("/:commentId", commentController.updateComment);
+
 
 module.exports = router;
