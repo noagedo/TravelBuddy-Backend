@@ -10,4 +10,6 @@ router.get("/:postId", postController.getPostById);
 
 router.get("/sender", postController.getPostBySender); 
 
+router.put("/:postId", postController.updatePost);
+
 module.exports = router;

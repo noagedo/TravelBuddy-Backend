@@ -11,3 +11,26 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/posts
+
+###
+
+# Get a post by ID
+GET http://localhost:3000/posts/67443b63403364e20bdcb8ad
+
+###
+
+GET http://localhost:3000/sender?sender=Noa
+
+
+###
+
+# Update a post by ID
+PUT http://localhost:3000/posts/67443b63403364e20bdcb8ad
+Content-Type: application/json
+
+{
+  "title": "Updated Post Title",
+  "content": "Updated content for the post."
+}
+
+###
