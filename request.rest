@@ -65,3 +65,5 @@ Content-Type: application/json
 }
 
 ###
+# Delete a comment
+DELETE http://localhost:3000/comments/673d9786bbfbbd848bdfb1ff
