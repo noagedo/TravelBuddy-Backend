@@ -23,6 +23,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const postRoutes = require("./routes/post");
 app.use("/posts", postRoutes);
 
+const commentRoutes = require("./routes/comment");
+app.use("/comments", commentRoutes);
+
+
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
