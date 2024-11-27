@@ -9,3 +9,5 @@ Content-Type: application/json
   "sender": "Noa"
 }
 ###
+
+GET http://localhost:3000/posts
