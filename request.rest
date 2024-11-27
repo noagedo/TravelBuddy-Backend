@@ -1,0 +1,11 @@
+###
+# Add a new post
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+  "title": "My First Post",
+  "content": "This is the content of the first post.",
+  "sender": "Noa"
+}
+###
