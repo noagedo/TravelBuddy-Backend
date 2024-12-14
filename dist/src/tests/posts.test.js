@@ -69,7 +69,6 @@ describe("Posts test suite", () => {
     }));
     test("Fail to get post by non-existing ID", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app).get("/posts/675d74c7e039287983e32a15");
-        console.log("EROROROROROR" + response.body);
         expect(response.statusCode).toBe(404);
     }));
 });
