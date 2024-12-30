@@ -53,10 +53,22 @@ const updatePost = async (req:Request, res:Response) => {
     }
 };
 
+const deletePost = async (req:Request, res:Response) => {
+    try {
+        const deletedPost = await Post.findByIdAndDelete(req.params.postId);
+        if (deletedPost) res.status(201).send("Post deleted successfully");
+        else res.status(404).send("Post not found");
+    } catch (error) {
+        res.status(400).send(error);
+    }
+}
+
+
 export default {
     addNewPost,
     getAllPosts,
     getPostById,
     getPostBySender,
     updatePost,
+    deletePost
 };

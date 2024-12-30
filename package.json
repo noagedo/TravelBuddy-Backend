@@ -6,8 +6,9 @@
   "scripts": {
     "start": "copy .env_dev .env /Y && tsc && node dist/app.js",
     "dev": "copy .env_dev .env /Y && nodemon ./src/app.ts",
-    "test": "copy .env_test .env /Y && tsc && jest --detectOpenHandles --forceExit",
+    "test": "copy .env_test .env /Y && tsc && jest --coverage --detectOpenHandles --forceExit",
     "testAuth": "copy .env_test .env /Y && tsc && jest --detectOpenHandles --forceExit auth.test.ts",
+    "testPost": "copy .env_test .env /Y && tsc && jest --detectOpenHandles --forceExit posts.test.ts",
     "lint": "eslint . --ext .ts"
   },
   "author": "",

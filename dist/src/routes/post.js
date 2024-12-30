@@ -161,5 +161,6 @@ router.get("/sender", post_1.default.getPostBySender);
  *   description: Internal server error
  */
 router.put("/:postId", post_1.default.updatePost);
+router.delete("/:postId", post_1.default.deletePost);
 exports.default = router;
 //# sourceMappingURL=post.js.map

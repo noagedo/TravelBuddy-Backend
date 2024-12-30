@@ -164,4 +164,6 @@ router.get("/sender", postController.getPostBySender);
  */
 router.put("/:postId", postController.updatePost);
 
+router.delete("/:postId", postController.deletePost);
+
 export default router;
