@@ -38,12 +38,12 @@ const generateTokens = (user) => {
     const rand = Math.random();
     const accessToken = jsonwebtoken_1.default.sign({
         _id: user._id,
-        rand: rand
-    }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRATION });
+        rand: rand,
+    }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRATION || "10s" });
     const refreshToken = jsonwebtoken_1.default.sign({
         _id: user._id,
-        rand: rand
-    }, process.env.TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION });
+        rand: rand,
+    }, process.env.TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || "7d" });
     return { refreshToken: refreshToken, accessToken: accessToken };
 };
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -99,7 +99,8 @@ const validateRefreshToken = (refreshToken) => {
                     return;
                 }
                 //check if token exists
-                if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
+                if (!user.refreshTokens ||
+                    !user.refreshTokens.includes(refreshToken)) {
                     user.refreshTokens = [];
                     yield user.save();
                     reject(err);
@@ -134,6 +135,7 @@ const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield validateRefreshToken(req.body.refreshToken);
         const tokens = generateTokens(user);
+        console.log(tokens);
         if (!tokens) {
             res.status(400).send("error");
             return;
