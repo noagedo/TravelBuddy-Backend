@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import commentController from "../controllers/comment";
-import postController from "../controllers/post";
+
 
 /**
  * @swagger
@@ -141,7 +141,7 @@ router.get("/:postId", commentController.getCommentsByPostId);
  * 500:
  * description: Internal server error
  */
-router.put("/:commentId", commentController.updateComment);
+router.put("/:commentId", (req,res)=>{commentController.updateComment(req,res)});
 
 /**
  * @swagger
@@ -172,7 +172,10 @@ router.put("/:commentId", commentController.updateComment);
  * 
  */
 
-router.delete("/:commentId", (req,res)=>{postController.getPostById(req,res)});
+router.delete("/:commentId", (req,res)=>{commentController.deleteComment(req,res)});
+
+router.delete("/", commentController.deleteAllComments);
+
 
 
 export default router;
