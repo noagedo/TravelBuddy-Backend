@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "title": "My secound Post",
   "content": "This is the content of the first post.",
-  "sender": "noa"
+  "sender": "noaaaaaaaaaaaaaaaaaaaaaaa"
 }
 ###
 
@@ -15,7 +15,7 @@ GET http://localhost:3000/posts
 ###
 
 # Get a post by ID
-GET http://localhost:3000/posts/675d759f79812dfaf34244ce
+GET http://localhost:3000/posts/67725ecbdf917cd863f832ae
 Content-Type: application/json
 
 
@@ -27,7 +27,7 @@ Content-Type: application/json
 ###
 
 # Update a post by ID
-PUT http://localhost:3000/posts/675d759f79812dfaf34244ce
+PUT http://localhost:3000/posts/67725ecbdf917cd863f832ae
 Content-Type: application/json
 
 {
@@ -69,5 +69,5 @@ Content-Type: application/json
 
 ###
 # Delete a comment
-DELETE http://localhost:3000/comments/675d765f5bbdcc3099d50d84
+DELETE http://localhost:3000/comments/67725ecbdf917cd863f832ae
 Content-Type: application/json
