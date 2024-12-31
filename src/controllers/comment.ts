@@ -1,5 +1,6 @@
 import Comment from "../models/comment";
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 
 const createComment = async (req:Request, res:Response) => {
     try {
@@ -31,29 +32,55 @@ const getCommentsByPostId = async (req:Request, res:Response) => {
    
 };
 
-const updateComment = async (req:Request, res:Response) => {
+const updateComment = async (req: Request, res: Response) => {
     try {
-        const comment = await Comment.findByIdAndUpdate(req.params.commentId, req.body, { new: true });
-        res.json(comment);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-};
+        const comment = await Comment.findByIdAndUpdate(
+            req.params.commentId, 
+            req.body, 
+            { new: true }
+        );
 
-const deleteComment = async (req:Request, res:Response) => {
-    try {
-       
-        const deletedComment = await Comment.findByIdAndDelete(req.params.commentId);
-
-        if (!deletedComment) {
-            return res.status(404).send("Comment not found");
+        // Check if the comment exists
+        if (!comment) {
+            return res.status(404).json({ message: "Comment not found" });
         }
 
-        res.status(201).json({ message: "Comment deleted successfully" });
+        // Return the updated comment
+        res.status(200).json(comment);
     } catch (error) {
-        res.status(400).send(error);
+        // Handle validation errors, invalid IDs, etc.
+        res.status(400).json({ message: "Invalid request", error });
     }
 };
+
+const deleteComment = async (req: Request, res: Response) => {
+    try {
+        const { commentId } = req.params;
+        
+        if (!mongoose.Types.ObjectId.isValid(commentId)) {
+            return res.status(400).json({ message: "Invalid comment ID" });
+        }
+
+        const deletedComment = await Comment.findByIdAndDelete(commentId);
+
+        if (!deletedComment) {
+            return res.status(404).json({ message: "Comment not found" });
+        }
+
+        res.status(200).json({ message: "Comment deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error", error });
+    }
+};
+
+const deleteAllComments = async (req: Request, res: Response) => {
+    try {
+        await Comment.deleteMany({});
+        res.status(200).json({ message: "All comments deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error", error });
+    }
+}
 
 
 
@@ -64,4 +91,5 @@ export default {
     getCommentsByPostId,
     updateComment,
     deleteComment,
+    deleteAllComments,
 };

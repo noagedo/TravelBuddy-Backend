@@ -18,9 +18,11 @@ const register = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(400).send(err);
   }
-}
+};
 
-const generateTokens = (user: iUser): { refreshToken: string, accessToken: string } | null => {
+const generateTokens = (
+  user: iUser
+): { refreshToken: string; accessToken: string } | null => {
   if (process.env.TOKEN_SECRET === undefined) {
     return null;
   }
@@ -28,20 +30,21 @@ const generateTokens = (user: iUser): { refreshToken: string, accessToken: strin
   const accessToken = jwt.sign(
     {
       _id: user._id,
-      rand: rand
+      rand: rand,
     },
     process.env.TOKEN_SECRET,
-    { expiresIn: process.env.TOKEN_EXPIRATION });
+    { expiresIn: process.env.TOKEN_EXPIRATION || "10s" }
+  );
   const refreshToken = jwt.sign(
     {
       _id: user._id,
-      rand: rand
+      rand: rand,
     },
     process.env.TOKEN_SECRET,
-    { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION });
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || "7d" }
+  );
   return { refreshToken: refreshToken, accessToken: accessToken };
 };
-
 
 const login = async (req: Request, res: Response) => {
   const email = req.body.email;
@@ -62,59 +65,69 @@ const login = async (req: Request, res: Response) => {
       res.status(400).send("error");
       return;
     }
-   
-    if (user.refreshTokens == null){
-        user.refreshTokens = [];
+
+    if (user.refreshTokens == null) {
+      user.refreshTokens = [];
     }
     user.refreshTokens.push(tokens.refreshToken);
     await user.save();
-    res.status(200).send(
-      {
-        ...tokens,
-        _id: user._id
-      });
+    res.status(200).send({
+      ...tokens,
+      _id: user._id,
+    });
   } catch (err) {
     res.status(400).send(err);
   }
 };
 
-
 const validateRefreshToken = (refreshToken: string | undefined) => {
-  return new Promise<Document<unknown, object, iUser> & iUser>((resolve, reject) => {
-    if (refreshToken == null) {
-      reject("error");
-      return;
-    }
-    if (!process.env.TOKEN_SECRET) {
-      reject("error");
-      return;
-    }
-    jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err, payload) => {
-      if (err) {
-        reject(err);
+  return new Promise<Document<unknown, object, iUser> & iUser>(
+    (resolve, reject) => {
+      if (refreshToken == null) {
+        reject("error");
         return;
       }
-      const userId = (payload as Payload)._id;
-      try {
-        const user = await userModel.findById(userId);
-        if (!user) {
-          reject("error");
-          return;
-        }
-        //check if token exists
-        if (!user.refreshTokens || !user.refreshTokens.includes(refreshToken)) {
-          user.refreshTokens = [];
-          await user.save();
-          reject(err);
-          return;
-        }
-        resolve(user);
-      } catch (err) {
-        reject(err);
+      if (!process.env.TOKEN_SECRET) {
+        reject("error");
+        return;
       }
-    });
-  });
-}
+      jwt.verify(
+        refreshToken,
+        process.env.TOKEN_SECRET,
+        async (err, payload) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          const userId = (payload as Payload)._id;
+          try {
+            const user = await userModel.findById(userId);
+            if (!user) {
+              reject("error");
+              return;
+            }
+            //check if token exists
+            if (
+              !user.refreshTokens ||
+              !user.refreshTokens.includes(refreshToken)
+            ) {
+              user.refreshTokens = [];
+              await user.save();
+              reject(err);
+              return;
+            }
+            resolve(user);
+          } catch (err) {
+            reject(err);
+          }
+        }
+      );
+    }
+  );
+};
+
+
+  
 
 const logout = async (req: Request, res: Response) => {
   try {
@@ -124,10 +137,12 @@ const logout = async (req: Request, res: Response) => {
       return;
     }
     //remove the token from the user
-    user.refreshTokens = user.refreshTokens!.filter((token) => token !== req.body.refreshToken);
+    user.refreshTokens = user.refreshTokens!.filter(
+      (token) => token !== req.body.refreshToken
+    );
     await user.save();
     res.status(200).send("logged out");
-  } catch{
+  } catch {
     res.status(400).send("error");
     return;
   }
@@ -138,27 +153,33 @@ const refresh = async (req: Request, res: Response) => {
     const user = await validateRefreshToken(req.body.refreshToken);
 
     const tokens = generateTokens(user);
+    console.log(tokens);
     if (!tokens) {
       res.status(400).send("error");
       return;
     }
-    user.refreshTokens = user.refreshTokens!.filter((token) => token !== req.body.refreshToken);
+    user.refreshTokens = user.refreshTokens!.filter(
+      (token) => token !== req.body.refreshToken
+    );
     user.refreshTokens.push(tokens.refreshToken);
     await user.save();
     res.status(200).send({
       ...tokens,
-      _id: user._id
+      _id: user._id,
     });
   } catch {
     res.status(400).send("error");
   }
 };
 
-
 type Payload = {
   _id: string;
-}
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+};
+export const authMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const tokenHeader = req.headers["authorization"];
   const token = tokenHeader && tokenHeader.split(" ")[1];
   if (!token) {
@@ -178,11 +199,13 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
       next();
     }
   });
-}
+};
+
+
 
 export default {
   register,
   login,
   refresh,
   logout,
-}
+};
