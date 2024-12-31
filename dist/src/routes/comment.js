@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const comment_1 = __importDefault(require("../controllers/comment"));
-const post_1 = __importDefault(require("../controllers/post"));
 /**
  * @swagger
  * tags:
@@ -140,7 +139,7 @@ router.get("/:postId", comment_1.default.getCommentsByPostId);
  * 500:
  * description: Internal server error
  */
-router.put("/:commentId", comment_1.default.updateComment);
+router.put("/:commentId", (req, res) => { comment_1.default.updateComment(req, res); });
 /**
  * @swagger
  * /comments/{commentId}:
@@ -169,6 +168,7 @@ router.put("/:commentId", comment_1.default.updateComment);
  * description: Internal server error
  *
  */
-router.delete("/:commentId", (req, res) => { post_1.default.getPostById(req, res); });
+router.delete("/:commentId", (req, res) => { comment_1.default.deleteComment(req, res); });
+router.delete("/", comment_1.default.deleteAllComments);
 exports.default = router;
 //# sourceMappingURL=comment.js.map

@@ -24,15 +24,14 @@ beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
 }));
 let commentId = "675d809094c66c170eae16d1";
 const testComment = {
-    content: "Test content", // Adjusted to use the `content` field as per schema
-    postId: "erwtgwerbt245t4256b345", // Replace with actual Post ID from the database
-    sender: "yuval", // Replace with actual User ID from the database
+    content: "Test content",
+    postId: "erwtgwerbt245t4256b345",
+    sender: "yuval",
 };
 const invalidComment = {
-    content: "Test content", // content is valid, but missing postId and sender
+    content: "Test content",
 };
 describe("Comments test suite", () => {
-    // Test for getting all comments initially
     test("Comment test get all", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app).get("/comments");
         expect(response.statusCode).toBe(200);
@@ -79,6 +78,40 @@ describe("Comments test suite", () => {
             response.statusCode = 404;
         }
         expect(response.statusCode).toBe(404);
+    }));
+    // Test for updating a comment
+    test("Test update comment", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).put("/comments/" + commentId).send({ content: "Updated content" });
+        expect(response.statusCode).toBe(200);
+        expect(response.body.content).toBe("Updated content");
+    }));
+    // Test for failing to update a non-existing comment
+    test("Test update comment fail", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).put("/comments/" + "3").send({ content: "Updated content" });
+        expect(response.statusCode).toBe(400);
+    }));
+    // Test for deleting a comment
+    test("Test delete comment", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).delete("/comments/" + commentId);
+        expect(response.statusCode).toBe(200);
+    }));
+    // Test for failing to delete a non-existing comment
+    test("Test delete comment fail", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).delete("/comments/" + "invalidId123");
+        expect(response.statusCode).toBe(400); // Expect 400 for invalid ID
+        expect(response.body.message).toBe("Invalid comment ID");
+        const response2 = yield (0, supertest_1.default)(app).delete("/comments/" + "64c7f9ad72c123456789abcd"); // Non-existent ID
+        expect(response2.statusCode).toBe(404); // Expect 404 for non-existent comment
+        expect(response2.body.message).toBe("Comment not found");
+    }));
+    test("Test delete all comments", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).delete("/comments");
+        expect(response.statusCode).toBe(200);
+    }));
+    test("Test get all comments after deleting all", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app).get("/comments");
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveLength(0);
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         console.log("afterAll");

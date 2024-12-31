@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const comment_1 = __importDefault(require("../models/comment"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const createComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const comment = new comment_1.default(req.body);
@@ -44,22 +45,41 @@ const getCommentsByPostId = (req, res) => __awaiter(void 0, void 0, void 0, func
 const updateComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const comment = yield comment_1.default.findByIdAndUpdate(req.params.commentId, req.body, { new: true });
-        res.json(comment);
+        // Check if the comment exists
+        if (!comment) {
+            return res.status(404).json({ message: "Comment not found" });
+        }
+        // Return the updated comment
+        res.status(200).json(comment);
     }
     catch (error) {
-        res.status(400).send(error);
+        // Handle validation errors, invalid IDs, etc.
+        res.status(400).json({ message: "Invalid request", error });
     }
 });
 const deleteComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedComment = yield comment_1.default.findByIdAndDelete(req.params.commentId);
-        if (!deletedComment) {
-            return res.status(404).send("Comment not found");
+        const { commentId } = req.params;
+        if (!mongoose_1.default.Types.ObjectId.isValid(commentId)) {
+            return res.status(400).json({ message: "Invalid comment ID" });
         }
-        res.status(201).json({ message: "Comment deleted successfully" });
+        const deletedComment = yield comment_1.default.findByIdAndDelete(commentId);
+        if (!deletedComment) {
+            return res.status(404).json({ message: "Comment not found" });
+        }
+        res.status(200).json({ message: "Comment deleted successfully" });
     }
     catch (error) {
-        res.status(400).send(error);
+        res.status(500).json({ message: "Internal server error", error });
+    }
+});
+const deleteAllComments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield comment_1.default.deleteMany({});
+        res.status(200).json({ message: "All comments deleted successfully" });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Internal server error", error });
     }
 });
 exports.default = {
@@ -68,5 +88,6 @@ exports.default = {
     getCommentsByPostId,
     updateComment,
     deleteComment,
+    deleteAllComments,
 };
 //# sourceMappingURL=comment.js.map

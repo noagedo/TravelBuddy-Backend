@@ -70,11 +70,24 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(400).send(error);
     }
 });
+const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const deletedPost = yield post_1.default.findByIdAndDelete(req.params.postId);
+        if (deletedPost)
+            res.status(201).send("Post deleted successfully");
+        else
+            res.status(404).send("Post not found");
+    }
+    catch (error) {
+        res.status(400).send(error);
+    }
+});
 exports.default = {
     addNewPost,
     getAllPosts,
     getPostById,
     getPostBySender,
     updatePost,
+    deletePost
 };
 //# sourceMappingURL=post.js.map
