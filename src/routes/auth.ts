@@ -19,8 +19,7 @@ import authController from "../controllers/auth";
  *       bearerFormat: JWT
  */
 
-
- /**
+/**
  * @swagger
  * components:
  *   schemas:
@@ -41,15 +40,15 @@ import authController from "../controllers/auth";
  *         password: '123456'
  */
 
+router.post("/register", (req,res)=>{authController.register(req,res)});
 
 
-router.post("/register", authController.register);
 
- /**
+/**
  * @swagger
  * /auth/register:
  *   post:
- *     summary: registers a new user
+ *     summary: Registers a new user
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -64,13 +63,13 @@ router.post("/register", authController.register);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
- *     400:
- *      description: Bad request
- *    500:
- *     description: Internal server error
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  */
 
- /**
+/**
  * @swagger
  * components:
  *   schemas:
@@ -93,11 +92,12 @@ router.post("/register", authController.register);
 
 router.post("/login", authController.login);
 
- /**
+/**
  * @swagger
  * /auth/login:
  *   post:
- *     summary: registers a new user
+ *     summary: Logs in a user
+ *     description: Provide email and password
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -107,37 +107,37 @@ router.post("/login", authController.login);
  *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
- *         description: The acess & refresh tokens
+ *         description: Access and refresh tokens
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Tokens'
- *    400:
- *     description: Bad request
- *   500:
- *    description: Internal server error
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  */
 
- /**
+/**
  * @swagger
  * /auth/refreshToken:
  *   get:
- *     summary: get a new access token using the refresh token
+ *     summary: Get a new access token using the refresh token
  *     tags: [Auth]
- *     description: need to provide the refresh token in the auth header
+ *     description: Provide the refresh token in the auth header
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The acess & refresh tokens
+ *         description: Access and refresh tokens
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Tokens'
- *    400:
- *    description: Bad request
- *  500:
- *   description: Internal server error
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  */
 
 router.post("/refresh", authController.refresh);
@@ -146,24 +146,20 @@ router.post("/refresh", authController.refresh);
  * @swagger
  * /auth/logout:
  *   get:
- *     summary: logout a user
+ *     summary: Logs out a user
  *     tags: [Auth]
- *     description: need to provide the refresh token in the auth header
+ *     description: Provide the refresh token in the auth header
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: logout completed successfully
- *   400:
- *   description: Bad request
- * 500:
- * description: Internal server error
+ *         description: Logout completed successfully
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  */
 
 router.post("/logout", authController.logout);
-
-
-
-
 
 export default router;

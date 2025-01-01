@@ -32,6 +32,8 @@ const testUser: User = {
   accessToken: "12345"
 };
 
+
+
 describe("Auth test suite", () => {
   test("Auth test registration", async () => {
     const response = await request(app)
@@ -70,7 +72,7 @@ describe("Auth test suite", () => {
     testUser._id = response.body._id;
   });
 
-  test("Auth test login make sure tokens are diffresnt", async () => {
+  test("Auth test login make sure tokens are diffrent", async () => {
     const response = await request(app)
       .post(baseUrl + "/login")
       .send(testUser);
@@ -233,4 +235,112 @@ describe("Auth test suite", () => {
       });
     expect(response4.statusCode).toBe(201);
   });
+
+  test("Test token access fail", async () => {
+    const response2 = await request(app)
+      .post("/")
+      .set({
+        authorization: "JWT " + testUser.accessToken + "f",
+      })
+      .send({
+        title: "Test title",
+        content: "Test content",
+        sender: "noa",
+      });
+    expect(response2.statusCode).not.toBe(201);
+  });
+
+  test("Test refresh token fail", async () => {
+    const response = await request(app)
+      .post(baseUrl + "/refresh")
+      .send({
+        refreshToken: testUser.refreshToken,
+      });
+    expect(response.statusCode).toBe(200);
+    const newRefreshToken = response.body.refreshToken;
+
+    const response2 = await request(app)
+      .post(baseUrl + "/refresh")
+      .send({
+        refreshToken: testUser.refreshToken,
+      });
+    expect(response2.statusCode).not.toBe(200);
+
+    const response3 = await request(app)
+      .post(baseUrl + "/refresh")
+      .send({
+        refreshToken: newRefreshToken,
+      });
+    expect(response3.statusCode).not.toBe(200);
+  });
+
+  test("Auth test invalid email format", async () => {
+    const response = await request(app)
+      .post(baseUrl + "/register")
+      .send({
+        email: "not-an-email",
+        
+      });
+    expect(response.statusCode).toBe(400);
+  });
+
+ 
+
+  test("Auth test login non-existent user", async () => {
+    const response = await request(app)
+      .post(baseUrl + "/login")
+      .send({
+        email: "nonexistent@test.com",
+        password: "123456",
+      });
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toHaveProperty("error");
+  });
+  
+   
+  test("Auth test Login - invalid password (less than 8 characters)", async () => {
+    const response = await request(app)
+      .post(baseUrl + "/login")
+      .send({
+        email: "test@example.com",    
+        password: "123",              
+      });
+      
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("error");
+  });
+
+  test("Auth test register new user", async () => {
+    const response = await request(app)
+      .post(baseUrl + "/register")
+      .send({
+        email: "newuser@test.com",
+        password: "123456",
+        name: "New User"
+      });
+    expect(response.statusCode).toBe(200);
+  });
+
+  test("Auth test register with missing fields", async () => {
+    const response = await request(app)
+      .post(baseUrl + "/register")
+      .send({
+        email: "newuser@test.com"
+      });
+    expect(response.statusCode).toBe(400);
+    
+  });
+
+  test("Auth test login with incorrect password", async () => {
+    const response = await request(app)
+      .post(baseUrl + "/login")
+      .send({
+        email: "existinguser@test.com",
+        password: "wrongpassword"
+      });
+    expect(response.statusCode).toBe(404);
+    //expect(response.body).toHaveProperty("error");
+  });
+
+
 });

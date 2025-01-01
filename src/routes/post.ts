@@ -9,7 +9,7 @@ import postController from "../controllers/post";
  *   description: The Post API
  */
 
- /**
+/**
  * @swagger
  * components:
  *   schemas:
@@ -18,7 +18,7 @@ import postController from "../controllers/post";
  *       required:
  *         - title
  *         - content
- *        - sender
+ *         - sender
  *       properties:
  *         title:
  *           type: string
@@ -26,13 +26,13 @@ import postController from "../controllers/post";
  *         content:
  *           type: string
  *           description: The content of the post
- *          sender:
- *          type: string
- *         description: The sender of the post
+ *         sender:
+ *           type: string
+ *           description: The sender of the post
  *       example:
- *         title: 'My First Post'
- *         content: 'This is the content of my first post'
- *        sender: 'noa'
+ *         title: "My First Post"
+ *         content: "This is the content of my first post"
+ *         sender: "noa"
  */
 
 /**
@@ -40,6 +40,7 @@ import postController from "../controllers/post";
  * /posts:
  *   post:
  *     summary: Adds a new post
+ *     description: Adds a new post
  *     tags: [Posts]
  *     requestBody:
  *       required: true
@@ -62,6 +63,7 @@ router.post("/", postController.addNewPost);
  * /posts:
  *   get:
  *     summary: Gets all posts
+ *     description: Get all posts
  *     tags: [Posts]
  *     responses:
  *       200:
@@ -72,10 +74,8 @@ router.post("/", postController.addNewPost);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Post'
- *       400:
- *         description: Bad request
- *      404:
- *       description: Post not found
+ *       404:
+ *         description: Posts not found
  *       500:
  *         description: Internal server error
  */
@@ -86,6 +86,7 @@ router.get("/", postController.getAllPosts);
  * /posts/{postId}:
  *   get:
  *     summary: Gets a specific post by ID
+ *     description: Get a specific post by ID
  *     tags: [Posts]
  *     parameters:
  *       - in: path
@@ -101,10 +102,10 @@ router.get("/", postController.getAllPosts);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
- *      404:
- *        description: Post not found
- *     500:
- *      description: Internal server error
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
  */
 router.get("/:postId", postController.getPostById);
 
@@ -113,6 +114,7 @@ router.get("/:postId", postController.getPostById);
  * /posts/sender:
  *   get:
  *     summary: Gets posts by a specific sender
+ *     description: Get posts by sender
  *     tags: [Posts]
  *     responses:
  *       200:
@@ -123,11 +125,10 @@ router.get("/:postId", postController.getPostById);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Post'
- *      404:
- *       description: Post not found
- *     500:
- *      description: Internal server error
- * 
+ *       404:
+ *         description: Posts not found
+ *       500:
+ *         description: Internal server error
  */
 router.get("/sender", postController.getPostBySender);
 
@@ -136,6 +137,7 @@ router.get("/sender", postController.getPostBySender);
  * /posts/{postId}:
  *   put:
  *     summary: Updates a post by ID
+ *     description: Update a post by ID
  *     tags: [Posts]
  *     parameters:
  *       - in: path
@@ -157,13 +159,35 @@ router.get("/sender", postController.getPostBySender);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
- *    404:
- *     description: Post not found
- *   500:
- *   description: Internal server error
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
  */
 router.put("/:postId", postController.updatePost);
 
+/**
+ * @swagger
+ * /posts/{postId}:
+ *   delete:
+ *     summary: Deletes a post
+ *     description: Delete a post by ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The post ID
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
+ */
 router.delete("/:postId", postController.deletePost);
 
 export default router;
