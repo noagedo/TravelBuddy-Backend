@@ -3,17 +3,23 @@ import userModel, { iUser } from "../models/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Document } from "mongoose";
+import { isEmail } from "validator";
 
-const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response): Promise<Response | undefined> => {
+  const { email, password } = req.body;
+
+ 
+  if (!isEmail(email)) {
+    return res.status(400).send({ error: "Invalid email format" });
+  }
   try {
-    const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
     const user = await userModel.create({
-      email: req.body.email,
+      email,
       password: hashedPassword,
     });
+
     res.status(200).send(user);
   } catch (err) {
     res.status(400).send(err);
@@ -52,7 +58,7 @@ const login = async (req: Request, res: Response) => {
   try {
     const user = await userModel.findOne({ email: email });
     if (!user) {
-      res.status(400).send("incorrect email or password");
+      res.status(404).send({ error: "User not found" }); 
       return;
     }
     const validPassword = await bcrypt.compare(password, user.password);
@@ -62,7 +68,7 @@ const login = async (req: Request, res: Response) => {
     }
     const tokens = generateTokens(user);
     if (!tokens) {
-      res.status(400).send("error");
+      res.status(400).send({ error: "Token generation error" }); 
       return;
     }
 
@@ -76,7 +82,11 @@ const login = async (req: Request, res: Response) => {
       _id: user._id,
     });
   } catch (err) {
-    res.status(400).send(err);
+    if (err instanceof Error) {
+      res.status(400).send({ error: err.message || "An error occurred" });
+    } else {
+      res.status(400).send({ error: "An error occurred" });
+    }
   }
 };
 
@@ -171,6 +181,7 @@ const refresh = async (req: Request, res: Response) => {
     res.status(400).send("error");
   }
 };
+
 
 type Payload = {
   _id: string;

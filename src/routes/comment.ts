@@ -2,7 +2,6 @@ import express from "express";
 const router = express.Router();
 import commentController from "../controllers/comment";
 
-
 /**
  * @swagger
  * tags:
@@ -36,6 +35,7 @@ import commentController from "../controllers/comment";
  * /comments:
  *   post:
  *     summary: Creates a new comment
+ *     description: Creates a new comment
  *     tags: [Comments]
  *     requestBody:
  *       required: true
@@ -50,10 +50,10 @@ import commentController from "../controllers/comment";
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Comment'
- *      400:
- *        description: Bad request
- *     500:
- *       description: Internal server error
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  */
 router.post("/", commentController.createComment);
 
@@ -62,6 +62,7 @@ router.post("/", commentController.createComment);
  * /comments:
  *   get:
  *     summary: Gets all comments
+ *     description: Retrieves all comments
  *     tags: [Comments]
  *     responses:
  *       200:
@@ -72,10 +73,10 @@ router.post("/", commentController.createComment);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Comment'
- *      400:
- *       description: Bad request
- *    500:
- *     description: Internal server error
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
  */
 router.get("/", commentController.getAllComments);
 
@@ -83,7 +84,8 @@ router.get("/", commentController.getAllComments);
  * @swagger
  * /comments/{postId}:
  *   get:
- *     summary: Gets all comments for a specific post by post ID
+ *     summary: Gets comments by post ID
+ *     description: Retrieves all comments for a specific post
  *     tags: [Comments]
  *     parameters:
  *       - in: path
@@ -91,7 +93,7 @@ router.get("/", commentController.getAllComments);
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the post for which to retrieve comments
+ *         description: The ID of the post
  *     responses:
  *       200:
  *         description: List of comments for the specified post
@@ -101,10 +103,10 @@ router.get("/", commentController.getAllComments);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Comment'
- *     400:
- *      description: Bad request
- *   404:
- *    description: Post not found
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Post not found
  */
 router.get("/:postId", commentController.getCommentsByPostId);
 
@@ -112,7 +114,8 @@ router.get("/:postId", commentController.getCommentsByPostId);
  * @swagger
  * /comments/{commentId}:
  *   put:
- *     summary: Updates a comment by its ID
+ *     summary: Updates a comment
+ *     description: Updates a comment by its ID
  *     tags: [Comments]
  *     parameters:
  *       - in: path
@@ -120,7 +123,7 @@ router.get("/:postId", commentController.getCommentsByPostId);
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the comment to update
+ *         description: The ID of the comment
  *     requestBody:
  *       required: true
  *       content:
@@ -134,12 +137,12 @@ router.get("/:postId", commentController.getCommentsByPostId);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Comment'
- *    400:
- *     description: Bad request
- *  404:
- *  description: Comment not found
- * 500:
- * description: Internal server error
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Comment not found
+ *       500:
+ *         description: Internal server error
  */
 router.put("/:commentId", (req,res)=>{commentController.updateComment(req,res)});
 
@@ -147,7 +150,8 @@ router.put("/:commentId", (req,res)=>{commentController.updateComment(req,res)})
  * @swagger
  * /comments/{commentId}:
  *   delete:
- *     summary: Deletes a comment by its ID
+ *     summary: Deletes a comment
+ *     description: Deletes a comment by its ID
  *     tags: [Comments]
  *     parameters:
  *       - in: path
@@ -155,27 +159,32 @@ router.put("/:commentId", (req,res)=>{commentController.updateComment(req,res)})
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the comment to delete
+ *         description: The ID of the comment
  *     responses:
  *       200:
  *         description: The deleted comment
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Comment'
- *    400:
- *    description: Bad request
- * 404:
- * description: Comment not found
- * 500:
- * description: Internal server error
- * 
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Comment not found
+ *       500:
+ *         description: Internal server error
  */
-
 router.delete("/:commentId", (req,res)=>{commentController.deleteComment(req,res)});
 
+/**
+ * @swagger
+ * /comments:
+ *   delete:
+ *     summary: Deletes all comments
+ *     description: Removes all comments from the database
+ *     tags: [Comments]
+ *     responses:
+ *       200:
+ *         description: All comments deleted
+ *       500:
+ *         description: Internal server error
+ */
 router.delete("/", commentController.deleteAllComments);
-
-
 
 export default router;

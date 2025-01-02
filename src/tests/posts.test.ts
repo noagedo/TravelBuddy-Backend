@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 import request from "supertest";
 import initApp from "../server";
 import mongoose from "mongoose";
@@ -215,7 +205,8 @@ test("Fail to delete post due to server error", async () => {
     expect(response.text).toBe("{}");
 });
 
-    
+
+
 
 });
 
