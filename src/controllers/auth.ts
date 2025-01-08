@@ -5,13 +5,20 @@ import jwt from "jsonwebtoken";
 import { Document } from "mongoose";
 import { isEmail } from "validator";
 
-export const register = async (req: Request, res: Response): Promise<Response | undefined> => {
+
+const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
- 
+  // Validate email format
   if (!isEmail(email)) {
     return res.status(400).send({ error: "Invalid email format" });
   }
+
+  // Add password validation
+  if (!password || password.trim() === '') {
+    return res.status(400).send({ error: "Invalid input data" });
+  }
+
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -21,8 +28,8 @@ export const register = async (req: Request, res: Response): Promise<Response | 
     });
 
     res.status(200).send(user);
-  } catch (err) {
-    res.status(400).send(err);
+  } catch {
+    res.status(400).send({ error: "Invalid input data" });
   }
 };
 
@@ -158,6 +165,7 @@ const logout = async (req: Request, res: Response) => {
   }
 };
 
+
 const refresh = async (req: Request, res: Response) => {
   try {
     const user = await validateRefreshToken(req.body.refreshToken);
@@ -209,8 +217,12 @@ export const authMiddleware = (
       req.params.userId = userId;
       next();
     }
+
+    
   });
 };
+
+
 
 
 
@@ -219,4 +231,5 @@ export default {
   login,
   refresh,
   logout,
+  
 };
