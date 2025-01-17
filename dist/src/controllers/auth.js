@@ -16,19 +16,28 @@ exports.authMiddleware = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const validator_1 = require("validator");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    // Validate email format
+    if (!(0, validator_1.isEmail)(email)) {
+        return res.status(400).send({ error: "Invalid email format" });
+    }
+    // Add password validation
+    if (!password || password.trim() === '') {
+        return res.status(400).send({ error: "Invalid input data" });
+    }
     try {
-        const password = req.body.password;
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
         const user = yield user_1.default.create({
-            email: req.body.email,
+            email,
             password: hashedPassword,
         });
         res.status(200).send(user);
     }
-    catch (err) {
-        res.status(400).send(err);
+    catch (_a) {
+        res.status(400).send({ error: "Invalid input data" });
     }
 });
 const generateTokens = (user) => {
@@ -52,7 +61,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_1.default.findOne({ email: email });
         if (!user) {
-            res.status(400).send("incorrect email or password");
+            res.status(404).send({ error: "User not found" });
             return;
         }
         const validPassword = yield bcrypt_1.default.compare(password, user.password);
@@ -62,7 +71,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const tokens = generateTokens(user);
         if (!tokens) {
-            res.status(400).send("error");
+            res.status(400).send({ error: "Token generation error" });
             return;
         }
         if (user.refreshTokens == null) {
@@ -73,7 +82,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(200).send(Object.assign(Object.assign({}, tokens), { _id: user._id }));
     }
     catch (err) {
-        res.status(400).send(err);
+        if (err instanceof Error) {
+            res.status(400).send({ error: err.message || "An error occurred" });
+        }
+        else {
+            res.status(400).send({ error: "An error occurred" });
+        }
     }
 });
 const validateRefreshToken = (refreshToken) => {

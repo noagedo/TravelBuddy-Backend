@@ -6,7 +6,11 @@ Content-Type: application/json
 {
   "title": "My secound Post",
   "content": "This is the content of the first post.",
-  "sender": "noaaaaaaaaaaaaaaaaaaaaaaa"
+  "sender": "noa",
+  "createdAt": "2021-08-01T12:00:00.000Z",
+  "likes": 0,
+  "photos": []
+  
 }
 ###
 
@@ -15,19 +19,19 @@ GET http://localhost:3000/posts
 ###
 
 # Get a post by ID
-GET http://localhost:3000/posts/67725ecbdf917cd863f832ae
+GET http://localhost:3000/posts/678a0f672df28e47056b70d6
 Content-Type: application/json
 
 
 ###
 
-GET http://localhost:3000/posts?sender=Noa
+GET http://localhost:3000/posts?sender=yuval
 Content-Type: application/json
 
 ###
 
 # Update a post by ID
-PUT http://localhost:3000/posts/67725ecbdf917cd863f832ae
+PUT http://localhost:3000/posts/678a0f672df28e47056b70d6
 Content-Type: application/json
 
 {
@@ -41,8 +45,8 @@ POST http://localhost:3000/comments
 Content-Type: application/json
 
 {
-  "postId": "64b1f69b4f1a25673e18b522",
-  "content": "This is a test comment.",
+  "postId": "678a0f672df28e47056b70d6",
+  "content": "This is a test2 comment.",
   "sender": "Yuvallllllllllllllllll ",
   "createdAt": "2021-08-01T12:00:00.000Z"
 
@@ -54,12 +58,12 @@ GET http://localhost:3000/comments
 ###
 
 # Get comments by post ID
-GET http://localhost:3000/comments/64b1f69b4f1a25673e18b523
+GET http://localhost:3000/comments/678a0f672df28e47056b70d6
 Content-Type: application/json
 ###
 
 # Update a comment
-PUT http://localhost:3000/comments/675d76065bbdcc3099d50d78
+PUT http://localhost:3000/comments/678a12982da196f13dde3f3b
 Content-Type: application/json
 
 {
@@ -69,5 +73,5 @@ Content-Type: application/json
 
 ###
 # Delete a comment
-DELETE http://localhost:3000/comments/67725ecbdf917cd863f832ae
+DELETE http://localhost:3000/comments/678a12982da196f13dde3f3b
 Content-Type: application/json

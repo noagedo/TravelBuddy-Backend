@@ -103,7 +103,6 @@ test("Get posts by sender when multiple posts exist", async () => {
         sender: "yuval",
     };
     await request(app).post("/").send(additionalPost);
-
     const response = await request(app).get("/?sender=" + testPost.sender);
     expect(response.statusCode).not.toBe(400);
     
