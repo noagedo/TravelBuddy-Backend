@@ -30,32 +30,7 @@ import commentController from "../controllers/comment";
  *         content: 'This is a comment'
  */
 
-/**
- * @swagger
- * /comments:
- *   post:
- *     summary: Creates a new comment
- *     description: Creates a new comment
- *     tags: [Comments]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Comment'
- *     responses:
- *       200:
- *         description: The created comment
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Comment'
- *       400:
- *         description: Bad request
- *       500:
- *         description: Internal server error
- */
-router.post("/", commentController.createComment);
+
 
 /**
  * @swagger
@@ -109,6 +84,50 @@ router.get("/", commentController.getAllComments);
  *         description: Post not found
  */
 router.get("/:postId", commentController.getCommentsByPostId);
+
+/**
+ * @swagger
+ * /comments:
+ *   post:
+ *     summary: Creates a new comment
+ *     description: Creates a new comment
+ *     tags: [Comments]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               postId:
+ *                 type: string
+ *                 description: The ID of the post
+ *                 example: "12345"
+ *               sender:
+ *                 type: string
+ *                 description: The sender of the comment
+ *                 example: "John Doe"
+ *               content:
+ *                 type: string
+ *                 description: The content of the comment
+ *                 example: "This is a comment."
+ *               createdAt:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The creation date of the comment
+ *                 example: "2023-10-01T12:00:00Z"
+ *     responses:
+ *       201:
+ *         description: Comment created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ *       400:
+ *         description: Bad request
+ */
+
+router.post("/", commentController.createComment);
 
 /**
  * @swagger
