@@ -25,6 +25,7 @@ type User = {
   accessToken?: string;
   refreshToken?: string;
   _id?: string;
+  profilePicture?: string;  
 };
 const testUser: User = {
   email: "user1@test.com",
