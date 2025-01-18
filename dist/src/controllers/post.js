@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -15,7 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const post_1 = __importDefault(require("../models/post"));
 const addNewPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const post = new post_1.default(req.body);
+        const _a = req.body, { likes = 0, photos = [] } = _a, rest = __rest(_a, ["likes", "photos"]);
+        const post = new post_1.default(Object.assign({ likes, photos }, rest));
         yield post.save();
         res.status(201).send(post);
     }
@@ -46,7 +58,7 @@ const getPostById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const getPostBySender = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const posts = yield post_1.default.find({ sender: req.query.sender });
+        const posts = yield post_1.default.find({ sender: { $regex: `^${req.query.sender}$`, $options: "i" } });
         if (posts.length > 0)
             res.send(posts);
         else

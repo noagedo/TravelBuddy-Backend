@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 
 const addNewPost = async (req:Request, res:Response) => {
     try {
-        const post = new Post(req.body);
+        const { likes = 0, photos = [], ...rest } = req.body;
+        const post = new Post({ likes, photos, ...rest });
         await post.save();
         res.status(201).send(post);
     } catch (error) {
@@ -33,7 +34,8 @@ const getPostById = async (req:Request, res:Response) => {
 
 const getPostBySender = async (req:Request, res:Response) => {
     try {
-        const posts = await Post.find({ sender: req.query.sender });
+        console.log(req.query.sender);
+        const posts = await Post.find({ sender: { $regex: `^${req.query.sender}$`, $options: "i" } });
         if (posts.length > 0) res.send(posts);
         else res.status(404).send("No posts found for this sender");
     } catch (error) {
