@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 import authRoutes from "./routes/auth";
 import swaggerUI from "swagger-ui-express"
  import swaggerJsDoc from "swagger-jsdoc"
+ import file_routes from "./routes/file_routes";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,7 +25,9 @@ app.use((req,res,next)=>{
 app.use("/posts", postsRoutes);
 app.use("/comments", commentsRoutes);
 app.use("/auth", authRoutes);
-app.use(express.static("TravelBuddy"));
+app.use("/public/",express.static("public"));  // middleware to serve static files
+app.use("/storage/", express.static("storage"));
+app.use("/file/", file_routes);
 
  const options = {
   definition: {
