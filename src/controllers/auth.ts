@@ -7,7 +7,11 @@ import { isEmail } from "validator";
 
 
 const register = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const {userName, email, password } = req.body;
+  // Validate userName
+  if (!userName || userName.trim() === '') {
+    return res.status(400).send({ error: "Invalid input data" });
+  }
 
   // Validate email format
   if (!isEmail(email)) {
@@ -20,16 +24,22 @@ const register = async (req: Request, res: Response) => {
   }
 
   try {
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).send({ error: "Email is already in use" });
+    }
+  
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = await userModel.create({
+      userName,
       email,
       password: hashedPassword,
     });
-
+  
     res.status(200).send(user);
   } catch {
-    res.status(400).send({ error: "Invalid input data" });
+    res.status(400).send({ error: "An error occurred" });
   }
 };
 
