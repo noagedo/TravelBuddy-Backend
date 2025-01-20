@@ -9,7 +9,9 @@ import bodyParser from "body-parser";
 import authRoutes from "./routes/auth";
 import swaggerUI from "swagger-ui-express"
  import swaggerJsDoc from "swagger-jsdoc"
+ import cors from "cors";
 
+ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req,res,next)=>{

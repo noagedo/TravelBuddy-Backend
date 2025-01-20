@@ -58,6 +58,7 @@ const getPostById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const getPostBySender = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.query.sender);
         const posts = yield post_1.default.find({ sender: { $regex: `^${req.query.sender}$`, $options: "i" } });
         if (posts.length > 0)
             res.send(posts);

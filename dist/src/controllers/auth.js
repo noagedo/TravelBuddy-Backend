@@ -18,7 +18,11 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const validator_1 = require("validator");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
+    const { userName, email, password } = req.body;
+    // Validate userName
+    if (!userName || userName.trim() === '') {
+        return res.status(400).send({ error: "Invalid input data" });
+    }
     // Validate email format
     if (!(0, validator_1.isEmail)(email)) {
         return res.status(400).send({ error: "Invalid email format" });
@@ -28,16 +32,21 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(400).send({ error: "Invalid input data" });
     }
     try {
+        const existingUser = yield user_1.default.findOne({ email });
+        if (existingUser) {
+            return res.status(400).send({ error: "Email is already in use" });
+        }
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
         const user = yield user_1.default.create({
+            userName,
             email,
             password: hashedPassword,
         });
         res.status(200).send(user);
     }
     catch (_a) {
-        res.status(400).send({ error: "Invalid input data" });
+        res.status(400).send({ error: "An error occurred" });
     }
 });
 const generateTokens = (user) => {
