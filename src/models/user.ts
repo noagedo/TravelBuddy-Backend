@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema<iUser>({
   },
   profilePicture: {
     type: String,  
-    default: "",  
+     
   }
 });
 

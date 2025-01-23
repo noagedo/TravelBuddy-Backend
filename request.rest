@@ -9,7 +9,7 @@ Content-Type: application/json
   "sender": "noa",
   "createdAt": "2021-08-01T12:00:00.000Z",
   "likes": 0,
-  "photos": []
+  "photos": ["https://images.ctfassets.net/wv75stsetqy3/DaKdXY2tkQGWeVQiCbSx7/ac01166282697e4e0cafb99180d35cd1/Thailand_Featured.jpg?q=60&fit=fill&fm=webp"]
   
 }
 ###
@@ -75,3 +75,17 @@ Content-Type: application/json
 # Delete a comment
 DELETE http://localhost:3000/comments/678a12982da196f13dde3f3b
 Content-Type: application/json
+
+
+###
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  
+ "email": "user3@test.com",
+  "password": "123456",
+  "accessToken": "12345",
+  "profilePicture": "https://images.ctfassets.net/wv75stsetqy3/DaKdXY2tkQGWeVQiCbSx7/ac01166282697e4e0cafb99180d35cd1/Thailand_Featured.jpg?q=60&fit=fill&fm=webp"
+}
+
