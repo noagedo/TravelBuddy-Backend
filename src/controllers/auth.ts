@@ -13,12 +13,12 @@ const register = async (req: Request, res: Response) => {
     return res.status(400).send({ error: "Invalid input data" });
   }
 
-  // Validate email format
+  
   if (!isEmail(email)) {
     return res.status(400).send({ error: "Invalid email format" });
   }
 
-  // Add password validation
+  
   if (!password || password.trim() === '') {
     return res.status(400).send({ error: "Invalid input data" });
   }
@@ -31,10 +31,14 @@ const register = async (req: Request, res: Response) => {
   
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    let profilePicture = req.body.profilePicture;
+    if (!profilePicture) profilePicture = null;
     const user = await userModel.create({
       userName,
       email,
       password: hashedPassword,
+      profilePicture: profilePicture,
+      
     });
   
     res.status(200).send(user);
