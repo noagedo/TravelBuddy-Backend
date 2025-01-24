@@ -7,7 +7,7 @@ import { isEmail } from "validator";
 
 
 const register = async (req: Request, res: Response) => {
-  const {userName, email, password } = req.body;
+  const {email, password, userName } = req.body;
   // Validate userName
   if (!userName || userName.trim() === '') {
     return res.status(400).send({ error: "Invalid input data" });
@@ -42,7 +42,8 @@ const register = async (req: Request, res: Response) => {
     });
   
     res.status(200).send(user);
-  } catch {
+  } catch(error) {
+    console.error("Error during user registration:", error);
     res.status(400).send({ error: "An error occurred" });
   }
 };
@@ -101,6 +102,8 @@ const login = async (req: Request, res: Response) => {
     res.status(200).send({
       ...tokens,
       _id: user._id,
+      userName: user.userName,
+      profilePicture: user.profilePicture,
     });
   } catch (err) {
     if (err instanceof Error) {
