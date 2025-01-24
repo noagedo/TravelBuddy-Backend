@@ -23,11 +23,20 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const cors_1 = __importDefault(require("cors"));
+app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    next();
+});
 app.use("/posts", post_1.default);
 app.use("/comments", comment_1.default);
 app.use("/auth", auth_1.default);
+app.use(express_1.default.static("TravelBuddy"));
 const options = {
     definition: {
         openapi: "3.0.0",

@@ -20,6 +20,7 @@ afterAll(async () => {
 const baseUrl = "/auth";
 
 type User = {
+  userName: string;
   email: string;
   password: string;
   accessToken?: string;
@@ -28,10 +29,13 @@ type User = {
   profilePicture?: string;  
 };
 const testUser: User = {
+  userName: "Test User",
   email: "user1@test.com",
   password: "123456",
-  accessToken: "12345"
+ 
 };
+
+
 
 describe("Auth test suite", () => {
   test("Auth test registration", async () => {
@@ -72,6 +76,7 @@ describe("Auth test suite", () => {
     const response = await request(app)
       .post(baseUrl + "/register")
       .send({
+        userName: "TestUser",
         email: "",
         password: "123456"
       });
@@ -379,13 +384,13 @@ describe("Auth test suite", () => {
 
   test("Auth test register new user", async () => {
     const response = await request(app)
-      .post(baseUrl + "/register")
-      .send({
-        email: "newuser@test.com",
-        password: "123456",
-        name: "New User"
-      });
-    expect(response.statusCode).toBe(200);
+    .post(baseUrl + "/register")
+    .send({
+      email: "gedonoa@gmail.com",
+      password:"123456",
+      userName:"Noa"
+    });
+  expect(response.statusCode).toBe(200);
   });
 
   test("Auth test register with missing fields", async () => {

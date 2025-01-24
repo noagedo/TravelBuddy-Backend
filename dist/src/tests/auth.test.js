@@ -28,9 +28,9 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
 }));
 const baseUrl = "/auth";
 const testUser = {
+    userName: "Test User",
     email: "user1@test.com",
     password: "123456",
-    accessToken: "12345"
 };
 describe("Auth test suite", () => {
     test("Auth test registration", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,6 +67,7 @@ describe("Auth test suite", () => {
         const response = yield (0, supertest_1.default)(app)
             .post(baseUrl + "/register")
             .send({
+            userName: "TestUser",
             email: "",
             password: "123456"
         });
@@ -338,9 +339,9 @@ describe("Auth test suite", () => {
         const response = yield (0, supertest_1.default)(app)
             .post(baseUrl + "/register")
             .send({
-            email: "newuser@test.com",
+            email: "gedonoa@gmail.com",
             password: "123456",
-            name: "New User"
+            userName: "Noa"
         });
         expect(response.statusCode).toBe(200);
     }));
