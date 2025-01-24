@@ -341,7 +341,7 @@ describe("Auth test suite", () => {
             .send({
             email: "gedonoa@gmail.com",
             password: "123456",
-            userName: "Noa"
+            userName: "Noaaaaaaaaaa"
         });
         expect(response.statusCode).toBe(200);
     }));

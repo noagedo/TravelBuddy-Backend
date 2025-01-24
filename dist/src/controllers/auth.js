@@ -18,16 +18,14 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const validator_1 = require("validator");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userName, email, password } = req.body;
+    const { email, password, userName } = req.body;
     // Validate userName
     if (!userName || userName.trim() === '') {
         return res.status(400).send({ error: "Invalid input data" });
     }
-    // Validate email format
     if (!(0, validator_1.isEmail)(email)) {
         return res.status(400).send({ error: "Invalid email format" });
     }
-    // Add password validation
     if (!password || password.trim() === '') {
         return res.status(400).send({ error: "Invalid input data" });
     }
@@ -38,14 +36,19 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
+        let profilePicture = req.body.profilePicture;
+        if (!profilePicture)
+            profilePicture = null;
         const user = yield user_1.default.create({
             userName,
             email,
             password: hashedPassword,
+            profilePicture: profilePicture,
         });
         res.status(200).send(user);
     }
-    catch (_a) {
+    catch (error) {
+        console.error("Error during user registration:", error);
         res.status(400).send({ error: "An error occurred" });
     }
 });

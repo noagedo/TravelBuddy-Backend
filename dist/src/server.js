@@ -24,6 +24,7 @@ const auth_1 = __importDefault(require("./routes/auth"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const cors_1 = __importDefault(require("cors"));
+const file_routes_1 = __importDefault(require("./routes/file_routes"));
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
@@ -36,7 +37,9 @@ app.use((req, res, next) => {
 app.use("/posts", post_1.default);
 app.use("/comments", comment_1.default);
 app.use("/auth", auth_1.default);
-app.use(express_1.default.static("TravelBuddy"));
+app.use("/public/", express_1.default.static("public")); // middleware to serve static files
+app.use("/storage/", express_1.default.static("storage"));
+app.use("/file/", file_routes_1.default);
 const options = {
     definition: {
         openapi: "3.0.0",
