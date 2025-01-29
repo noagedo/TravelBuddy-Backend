@@ -8,7 +8,7 @@ export interface iUser {
   refreshTokens?: string[];
   profilePicture?: string;  
   googleId?: string;
-  avatar?: string;
+  
 }
 
 const userSchema = new mongoose.Schema<iUser>({
@@ -37,9 +37,7 @@ const userSchema = new mongoose.Schema<iUser>({
     type: String,
     required: false,
   },
-  avatar: {
-    type: String,
-  },
+  
 });
 
 const userModel = mongoose.model<iUser>("users", userSchema);
