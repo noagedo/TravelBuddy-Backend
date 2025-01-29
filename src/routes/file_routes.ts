@@ -58,4 +58,9 @@ router.post('/', upload.single("file"), function (req, res) {
     res.status(200).send({ url: base + "/" + req.file?.path })
 });
 
+router.post('/multiple', upload.array("files", 10), function (req, res) {
+    const urls = (req.files as Express.Multer.File[] ?? []).map((file: Express.Multer.File) => base + "/" + file.path)
+    res.status(200).send({ urls: urls })
+}
+);
 export = router;
