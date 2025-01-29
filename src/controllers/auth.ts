@@ -31,13 +31,13 @@ const register = async (req: Request, res: Response) => {
   
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    let avatar = req.body.avatar;
-    if (!avatar) avatar = null;
+    let profilePicture = req.body.profilePicture;
+    if (!profilePicture) profilePicture = null;
     const user = await userModel.create({
       userName,
       email,
       password: hashedPassword,
-      profilePicture: avatar,
+      profilePicture: profilePicture,
       
     });
   

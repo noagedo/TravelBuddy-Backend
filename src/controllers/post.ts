@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 
 const addNewPost = async (req:Request, res:Response) => {
     try {
-        const { likes = 0, photos = [], ...rest } = req.body;
+        const photos = req.body.photos || [];
+        const { likes = 0, ...rest } = req.body;
         const post = new Post({ likes, photos, ...rest });
         await post.save();
         res.status(201).send(post);
