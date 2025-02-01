@@ -4,6 +4,50 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Document } from "mongoose";
 import { isEmail } from "validator";
+import { OAuth2Client } from 'google-auth-library';
+
+
+const client = new OAuth2Client();
+const googleSignIn = async (req: Request, res: Response) => {
+  console.log(req.body);
+  try {
+      const ticket = await client.verifyIdToken({
+          idToken: req.body.credential,
+          audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      const email = payload?.email;
+      if (email != null) {
+          let user = await userModel.findOne({ 'email': email });
+          if (user == null) {
+              user = await userModel.create(
+                  {
+                      'userName': payload?.name,  
+                      'email': email,
+                      'password': '0',
+                      'profilePicture': payload?.picture
+                  });
+          }
+          const tokens = await generateTokens(user)
+          res.status(200).send(
+              {
+                  email: user.email,
+                  _id: user._id,
+                  profilePicture: user.profilePicture,
+                  ...tokens
+              })
+      }
+  } catch (err) {
+      if (err instanceof Error) {
+        return res.status(400).send(err.message);
+      } else {
+        return res.status(400).send("An error occurred");
+      }
+  }
+
+}
+
+
 
 
 const register = async (req: Request, res: Response) => {
@@ -27,6 +71,11 @@ const register = async (req: Request, res: Response) => {
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       return res.status(400).send({ error: "Email is already in use" });
+    }
+
+    const existingUserName = await userModel.findOne({ userName });
+    if (existingUserName) {
+      return res.status(400).send({ error: "Username is already in use" });
     }
   
     const salt = await bcrypt.genSalt(10);
@@ -244,9 +293,11 @@ export const authMiddleware = (
 
 
 export default {
+  googleSignIn,
   register,
   login,
   refresh,
   logout,
+  
   
 };
