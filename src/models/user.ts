@@ -12,10 +12,11 @@ export interface iUser {
 }
 
 const userSchema = new mongoose.Schema<iUser>({
-  userName:{ 
+  userName: { 
     type: String,
-    required: true 
-    },
+    required: true,
+    unique: true 
+  },
   email: {
     type: String,
     required: true,
@@ -31,13 +32,11 @@ const userSchema = new mongoose.Schema<iUser>({
   },
   profilePicture: {
     type: String,  
-     
   },
   googleId: {
     type: String,
     required: false,
   },
-  
 });
 
 const userModel = mongoose.model<iUser>("users", userSchema);

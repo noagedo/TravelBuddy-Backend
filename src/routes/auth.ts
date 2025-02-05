@@ -41,6 +41,8 @@ import authController from "../controllers/auth";
  */
 
 router.post("/register", (req,res)=>{authController.register(req,res)});
+router.post("/google", (req,res)=>{authController.googleSignIn(req,res)});
+
 
 
 
