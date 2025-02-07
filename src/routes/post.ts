@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import postController from "../controllers/post";
+import postController from "../controllers/post"; // Ensure this import is correct
 
 /**
  * @swagger
@@ -29,10 +29,14 @@ import postController from "../controllers/post";
  *         sender:
  *           type: string
  *           description: The sender of the post
+ *         senderProfilePicture:
+ *           type: string
+ *           description: The profile picture of the sender
  *       example:
  *         title: "My First Post"
  *         content: "This is the content of my first post"
  *         sender: "noa"
+ *         
  */
 
 /**
@@ -56,7 +60,7 @@ import postController from "../controllers/post";
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-router.post("/", postController.addNewPost);
+router.post("/", postController.addNewPost); // Ensure this line is correct
 
 /**
  * @swagger
