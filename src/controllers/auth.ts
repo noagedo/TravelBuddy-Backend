@@ -22,7 +22,7 @@ const googleSignIn = async (req: Request, res: Response) => {
           if (user == null) {
               user = await userModel.create(
                   {
-                      'userName': payload?.name,  
+                      'userName': payload?.name || email.split('@')[0],  
                       'email': email,
                       'password': '0',
                       'profilePicture': payload?.picture
@@ -31,6 +31,7 @@ const googleSignIn = async (req: Request, res: Response) => {
           const tokens = await generateTokens(user)
           res.status(200).send(
               {
+                userName: user.userName,
                   email: user.email,
                   _id: user._id,
                   profilePicture: user.profilePicture,
