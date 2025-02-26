@@ -164,7 +164,43 @@ router.post("/refresh", authController.refresh);
 
 router.post("/logout", authController.logout);
 
-
+/**
+ * @swagger
+ * /auth/{id}:
+ *   put:
+ *     summary: Updates a user
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The updated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put("/:id", (req, res) => {
+    authController.updateUser(req, res);
+  });
+  
 
 
 export default router;
