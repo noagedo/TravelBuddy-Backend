@@ -210,6 +210,40 @@ const validateRefreshToken = (refreshToken: string | undefined) => {
   );
 };
 
+interface UpdateUserRequest extends Request {
+  params: {
+    id: string;
+  };
+  body: {
+    userName?: string;
+    email?: string;
+    password?: string;
+    profilePicture?: string;
+  };
+}
+
+const updateUser = async (req: UpdateUserRequest, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const updateData = req.body;
+
+    console.log("Updating user:", userId, updateData);
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const updatedUser = await userModel.findByIdAndUpdate(userId, updateData, { new: true });
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+    
+
 
   
 
@@ -299,6 +333,6 @@ export default {
   login,
   refresh,
   logout,
-  
+  updateUser,
   
 };
