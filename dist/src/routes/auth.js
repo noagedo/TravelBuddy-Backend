@@ -42,6 +42,7 @@ const auth_1 = __importDefault(require("../controllers/auth"));
  *         password: '123456'
  */
 router.post("/register", (req, res) => { auth_1.default.register(req, res); });
+router.post("/google", (req, res) => { auth_1.default.googleSignIn(req, res); });
 /**
  * @swagger
  * /auth/register:
@@ -152,5 +153,41 @@ router.post("/refresh", auth_1.default.refresh);
  *         description: Internal server error
  */
 router.post("/logout", auth_1.default.logout);
+/**
+ * @swagger
+ * /auth/{id}:
+ *   put:
+ *     summary: Updates a user
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The updated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put("/:id", (req, res) => {
+    auth_1.default.updateUser(req, res);
+});
 exports.default = router;
 //# sourceMappingURL=auth.js.map

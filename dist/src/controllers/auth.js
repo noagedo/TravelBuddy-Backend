@@ -17,6 +17,40 @@ const user_1 = __importDefault(require("../models/user"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const validator_1 = require("validator");
+const google_auth_library_1 = require("google-auth-library");
+const client = new google_auth_library_1.OAuth2Client();
+const googleSignIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+    try {
+        const ticket = yield client.verifyIdToken({
+            idToken: req.body.credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const email = payload === null || payload === void 0 ? void 0 : payload.email;
+        if (email != null) {
+            let user = yield user_1.default.findOne({ 'email': email });
+            if (user == null) {
+                user = yield user_1.default.create({
+                    'userName': (payload === null || payload === void 0 ? void 0 : payload.name) || email.split('@')[0],
+                    'email': email,
+                    'password': '0',
+                    'profilePicture': payload === null || payload === void 0 ? void 0 : payload.picture
+                });
+            }
+            const tokens = yield generateTokens(user);
+            res.status(200).send(Object.assign({ userName: user.userName, email: user.email, _id: user._id, profilePicture: user.profilePicture }, tokens));
+        }
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            return res.status(400).send(err.message);
+        }
+        else {
+            return res.status(400).send("An error occurred");
+        }
+    }
+});
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, userName } = req.body;
     // Validate userName
@@ -33,6 +67,10 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const existingUser = yield user_1.default.findOne({ email });
         if (existingUser) {
             return res.status(400).send({ error: "Email is already in use" });
+        }
+        const existingUserName = yield user_1.default.findOne({ userName });
+        if (existingUserName) {
+            return res.status(400).send({ error: "Username is already in use" });
         }
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
@@ -91,7 +129,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         user.refreshTokens.push(tokens.refreshToken);
         yield user.save();
-        res.status(200).send(Object.assign(Object.assign({}, tokens), { _id: user._id }));
+        res.status(200).send(Object.assign(Object.assign({}, tokens), { _id: user._id, userName: user.userName, profilePicture: user.profilePicture }));
     }
     catch (err) {
         if (err instanceof Error) {
@@ -140,6 +178,23 @@ const validateRefreshToken = (refreshToken) => {
         }));
     });
 };
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.id;
+        const updateData = req.body;
+        console.log("Updating user:", userId, updateData);
+        const user = yield user_1.default.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const updatedUser = yield user_1.default.findByIdAndUpdate(userId, updateData, { new: true });
+        return res.status(200).json(updatedUser);
+    }
+    catch (error) {
+        console.error("Error updating user:", error);
+        return res.status(500).json({ message: "Internal server error", error });
+    }
+});
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield validateRefreshToken(req.body.refreshToken);
@@ -199,9 +254,11 @@ const authMiddleware = (req, res, next) => {
 };
 exports.authMiddleware = authMiddleware;
 exports.default = {
+    googleSignIn,
     register,
     login,
     refresh,
     logout,
+    updateUser,
 };
 //# sourceMappingURL=auth.js.map

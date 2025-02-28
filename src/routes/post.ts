@@ -67,8 +67,19 @@ router.post("/", postController.addNewPost); // Ensure this line is correct
  * /posts:
  *   get:
  *     summary: Gets all posts
- *     description: Get all posts
+ *     description: Get all posts with pagination
  *     tags: [Posts]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: The number of posts to return
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *         description: The number of posts to skip
  *     responses:
  *       200:
  *         description: List of all posts

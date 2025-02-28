@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-const post_1 = __importDefault(require("../controllers/post"));
+const post_1 = __importDefault(require("../controllers/post")); // Ensure this import is correct
 /**
  * @swagger
  * tags:
@@ -32,10 +32,14 @@ const post_1 = __importDefault(require("../controllers/post"));
  *         sender:
  *           type: string
  *           description: The sender of the post
+ *         senderProfilePicture:
+ *           type: string
+ *           description: The profile picture of the sender
  *       example:
  *         title: "My First Post"
  *         content: "This is the content of my first post"
  *         sender: "noa"
+ *
  */
 /**
  * @swagger
@@ -58,14 +62,25 @@ const post_1 = __importDefault(require("../controllers/post"));
  *             schema:
  *               $ref: '#/components/schemas/Post'
  */
-router.post("/", post_1.default.addNewPost);
+router.post("/", post_1.default.addNewPost); // Ensure this line is correct
 /**
  * @swagger
  * /posts:
  *   get:
  *     summary: Gets all posts
- *     description: Get all posts
+ *     description: Get all posts with pagination
  *     tags: [Posts]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: The number of posts to return
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *         description: The number of posts to skip
  *     responses:
  *       200:
  *         description: List of all posts
