@@ -2,3 +2,7 @@ node_modules/
 coverage/
 dist/
 storage/
+.env/
+.env_prod/
+.env_dev/
+.env_test/
