@@ -26,7 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const post_1 = __importDefault(require("../models/post"));
 const addNewPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const _a = req.body, { likes = 0, photos = [] } = _a, rest = __rest(_a, ["likes", "photos"]);
+        const photos = req.body.photos || [];
+        const _a = req.body, { likes = 0 } = _a, rest = __rest(_a, ["likes"]);
         const post = new post_1.default(Object.assign({ likes, photos }, rest));
         yield post.save();
         res.status(201).send(post);

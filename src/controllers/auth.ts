@@ -154,6 +154,7 @@ const login = async (req: Request, res: Response) => {
       _id: user._id,
       userName: user.userName,
       profilePicture: user.profilePicture,
+      email: user.email,
     });
   } catch (err) {
     if (err instanceof Error) {
