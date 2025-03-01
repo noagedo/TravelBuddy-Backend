@@ -129,7 +129,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         user.refreshTokens.push(tokens.refreshToken);
         yield user.save();
-        res.status(200).send(Object.assign(Object.assign({}, tokens), { _id: user._id, userName: user.userName, profilePicture: user.profilePicture }));
+        res.status(200).send(Object.assign(Object.assign({}, tokens), { _id: user._id, userName: user.userName, profilePicture: user.profilePicture, email: user.email }));
     }
     catch (err) {
         if (err instanceof Error) {

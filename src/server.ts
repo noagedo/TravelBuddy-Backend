@@ -8,39 +8,42 @@ import commentsRoutes from "./routes/comment";
 import bodyParser from "body-parser";
 import authRoutes from "./routes/auth";
 import swaggerUI from "swagger-ui-express"
- import swaggerJsDoc from "swagger-jsdoc"
- import cors from "cors";
- import file_routes from "./routes/file_routes";
+import swaggerJsDoc from "swagger-jsdoc"
+import cors from "cors";
+import file_routes from "./routes/file_routes";
 
 
- app.use(cors());
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req,res,next)=>{
-  res.header("Access-Control-Allow-Origin","*");
-  res.header("Access-Control-Allow-Methods","*");
-  res.header("Access-Control-Allow-Headers","*");
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "*");
   next();
-          
+
 });
 
 
 app.use("/posts", postsRoutes);
 app.use("/comments", commentsRoutes);
 app.use("/auth", authRoutes);
-app.use("/public/",express.static("public"));  // middleware to serve static files
+app.use("/public/", express.static("public"));  // middleware to serve static files
 app.use("/storage/", express.static("storage"));
+app.use("/", express.static("front"));
 app.use("/file/", file_routes);
 
- const options = {
+const options = {
   definition: {
-      openapi: "3.0.0",
-      info: {
-          title: "Web Dev 2025 REST API",
-          version: "1.0.0",
-          description: "REST server including authentication using JWT",
-      },
-      servers: [{url: "http://localhost:" + process.env.PORT},],
+    openapi: "3.0.0",
+    info: {
+      title: "Web Dev 2025 REST API",
+      version: "1.0.0",
+      description: "REST server including authentication using JWT",
+    },
+    servers: [{ url: "http://localhost:" + process.env.PORT },
+    { url: "http://10.10.246.84", },
+    { url: "https://10.10.246.84", }],
   },
   apis: ["./src/routes/*.ts"],
 };

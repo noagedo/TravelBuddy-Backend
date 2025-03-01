@@ -39,6 +39,7 @@ app.use("/comments", comment_1.default);
 app.use("/auth", auth_1.default);
 app.use("/public/", express_1.default.static("public")); // middleware to serve static files
 app.use("/storage/", express_1.default.static("storage"));
+app.use("/", express_1.default.static("front"));
 app.use("/file/", file_routes_1.default);
 const options = {
     definition: {
@@ -48,7 +49,9 @@ const options = {
             version: "1.0.0",
             description: "REST server including authentication using JWT",
         },
-        servers: [{ url: "http://localhost:" + process.env.PORT },],
+        servers: [{ url: "http://localhost:" + process.env.PORT },
+            { url: "http://10.10.246.84", },
+            { url: "https://10.10.246.84", }],
     },
     apis: ["./src/routes/*.ts"],
 };
