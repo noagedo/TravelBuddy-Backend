@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import path from "path";
 const app = express();
 import dotenv from "dotenv";
 dotenv.config();
@@ -11,28 +12,9 @@ import swaggerUI from "swagger-ui-express"
 import swaggerJsDoc from "swagger-jsdoc"
 import cors from "cors";
 import file_routes from "./routes/file_routes";
-
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "*");
-  next();
-
-});
-
-
-app.use("/posts", postsRoutes);
-app.use("/comments", commentsRoutes);
-app.use("/auth", authRoutes);
-app.use("/public/", express.static("public"));  // middleware to serve static files
-app.use("/storage/", express.static("storage"));
-app.use("/", express.static("front"));
-app.use("/file/", file_routes);
-
+import routes from "./routes";
+import { nextTick } from "process";
+import { error } from "console";
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -47,8 +29,32 @@ const options = {
   },
   apis: ["./src/routes/*.ts"],
 };
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+
+});
+
+routes(app);
+
 const specs = swaggerJsDoc(options);
+
+app.use("/public/", express.static("public")); 
+app.use("/storage/", express.static("storage"));
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+
+app.use("/", express.static("front"));
+app.use((req, res, next) => {
+ res.status(200).sendFile(path.join(__dirname, "../../front/index.html"));
+}
+);
+//express.static("front")
 
 const initApp = async () => {
   return new Promise<Express>((resolve, reject) => {
@@ -70,6 +76,7 @@ const initApp = async () => {
       });
     }
   });
+  
 };
 
 export default initApp;
