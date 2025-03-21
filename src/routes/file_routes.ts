@@ -31,7 +31,7 @@ import multer from "multer";
  *                 url:
  *                   type: string
  *                   description: The URL of the uploaded file
- *                   example: "http://example.com/storage/1234567890.txt"
+ *                   example: "https://example.com/storage/1234567890.txt"
  *       400:
  *         description: Bad request
  */
