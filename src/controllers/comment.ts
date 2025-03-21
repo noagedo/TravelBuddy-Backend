@@ -40,15 +40,14 @@ const updateComment = async (req: Request, res: Response) => {
             { new: true }
         );
 
-        // Check if the comment exists
+        
         if (!comment) {
             return res.status(404).json({ message: "Comment not found" });
         }
 
-        // Return the updated comment
+        
         res.status(200).json(comment);
     } catch (error) {
-        // Handle validation errors, invalid IDs, etc.
         res.status(400).json({ message: "Invalid request", error });
     }
 };
