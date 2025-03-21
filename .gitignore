@@ -2,7 +2,13 @@ node_modules/
 coverage/
 dist/
 storage/
-.env/
-.env_prod/
-.env_dev/
-.env_test/
+.env
+.env_prod
+.env_dev
+.env_test
+.client-cert2.pem
+.client-key2.pem
+.client2.csr
+
+
+
