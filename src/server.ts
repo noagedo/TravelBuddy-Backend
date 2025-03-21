@@ -4,17 +4,12 @@ const app = express();
 import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
-import postsRoutes from "./routes/post";
-import commentsRoutes from "./routes/comment";
 import bodyParser from "body-parser";
-import authRoutes from "./routes/auth";
 import swaggerUI from "swagger-ui-express"
 import swaggerJsDoc from "swagger-jsdoc"
 import cors from "cors";
-import file_routes from "./routes/file_routes";
 import routes from "./routes";
-import { nextTick } from "process";
-import { error } from "console";
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -24,7 +19,7 @@ const options = {
       description: "REST server including authentication using JWT",
     },
     servers: [{ url: "http://localhost:" + process.env.PORT },
-    //{ url: "http://10.10.246.84", },
+    { url: "http://10.10.246.84", },
     { url: "https://10.10.246.84", }],
   },
   apis: ["./src/routes/*.ts"],
@@ -50,10 +45,9 @@ app.use("/storage/", express.static("storage"));
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use("/", express.static("front"));
-app.use((req, res, next) => {
- res.status(200).sendFile(path.join(__dirname, "../../front/index.html"));
-}
-);
+app.use((req, res) => {
+  res.status(200).sendFile(path.join(__dirname, "../../front/index.html"));
+});
 //express.static("front")
 
 const initApp = async () => {
