@@ -17,7 +17,7 @@ const auth_1 = __importDefault(require("../controllers/auth"));
  * components:
  *   securitySchemes:
  *     bearerAuth:
- *       type: http
+ *       type: https
  *       scheme: bearer
  *       bearerFormat: JWT
  */

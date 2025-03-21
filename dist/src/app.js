@@ -15,8 +15,10 @@ const fs_1 = __importDefault(require("fs"));
     }
     else {
         const prop = {
-            key: fs_1.default.readFileSync("../client-key.pem"),
-            cert: fs_1.default.readFileSync("../client-cert.pem"),
+            key: fs_1.default.readFileSync("client-key2.pem"),
+            cert: fs_1.default.readFileSync("client-cert2.pem"),
+            // key: fs.readFileSync("../clientv2-key.pem"),
+            // cert: fs.readFileSync("../clientv2-cert.pem"),
         };
         https_1.default.createServer(prop, app).listen(port);
     }
