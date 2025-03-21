@@ -45,7 +45,7 @@ describe("Posts test suite", () => {
 
     test("Add invalid post", async () => {
         const response = await request(app).post("/posts").send(invalidPost);
-        expect(response.statusCode).toBe(400); // Adjusted to match schema validation behavior
+        expect(response.statusCode).toBe(400); 
     });
 
     test("Get all posts after adding one", async () => {
@@ -65,7 +65,7 @@ describe("Posts test suite", () => {
         expect(response.statusCode).toBe(404);
     });
 
-//get post by sender testings
+
 
 test("Get posts by sender successfully", async () => {
     const response = await request(app).get("/posts?sender=" + testPost.sender);
@@ -82,12 +82,12 @@ test("Get posts by sender with no posts found", async () => {
 
 test("Fail to get posts due to missing sender parameter", async () => {
     const response = await request(app).get("/");
-    expect(response.statusCode).toBe(404); // Adjusted based on server validation
+    expect(response.statusCode).toBe(404); 
     expect(response.text).not.toBe("Success to fetch posts");
 });
 
 test("Fail to get posts due to database error", async () => {
-    // Simulate a database error
+    
     const error = new Error("Database error");
     postModel.find = jest.fn().mockRejectedValue(error);
 
@@ -97,7 +97,7 @@ test("Fail to get posts due to database error", async () => {
 });
 
 test("Get posts by sender when multiple posts exist", async () => {
-    // Create another post with the same sender
+    
     const additionalPost = {
         content: "Another post",
         sender: "yuval",
@@ -110,7 +110,7 @@ test("Get posts by sender when multiple posts exist", async () => {
 });
 
 
-//updating testings
+
 test("Successfully update the post and return it", async () => {
     const mockPost = { _id: "123", title: "Updated title", content: "Updated content" };
     postModel.findByIdAndUpdate = jest.fn().mockResolvedValue(mockPost);
@@ -153,13 +153,13 @@ test("Update post with empty request body", async () => {
 
     const response = await request(app)
         .put("/posts/123")
-        .send({}); // Empty body
+        .send({});
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(mockPost); // No changes, returns original post
+    expect(response.body).toEqual(mockPost); 
 });
 
-//deleting testings
+
 
 test("Delete post successfully", async () => {
     const response = await request(app).delete("/posts/" + postId);
@@ -174,23 +174,23 @@ test("Fail to delete post with invalid ID", async () => {
 });
 
 test("Fail to delete post after it's already deleted", async () => {
-    // Delete the post once
+   
     await request(app).delete("/posts/" + postId);
 
-    // Attempt to delete it again
+    
     const response = await request(app).delete("/posts/" + postId);
     expect(response.statusCode).toBe(404);
     expect(response.text).toBe("Post not found");
 });
 
 test("Fail to delete post with missing postId parameter", async () => {
-    const response = await request(app).delete("/posts/"); // Missing postId in the URL
+    const response = await request(app).delete("/posts/"); 
     expect(response.statusCode).toBe(404);
     expect(response.text).not.toBe("Success");
 });
 
 test("Fail to delete post due to invalid parameter type", async () => {
-    const response = await request(app).delete("/posts/12345xyz"); // Invalid postId format
+    const response = await request(app).delete("/posts/12345xyz"); 
     expect(response.statusCode).toBe(400);
     expect(response.text).not.toBe("Success");
 });
@@ -203,9 +203,6 @@ test("Fail to delete post due to server error", async () => {
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe("{}");
 });
-
-
-
 
 });
 

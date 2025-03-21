@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
-    sender: { type: mongoose.Schema.Types.String, ref: "User", required: true },//ID of the user
+    sender: { type: mongoose.Schema.Types.String, ref: "User", required: true },
     content: String,
     createdAt: { type: Date, default: Date.now },
     likes: { type: Number, default: 0 },

@@ -69,7 +69,7 @@ describe("Auth test suite", () => {
         password: ""
       });
     expect(response.statusCode).toBe(400);
-    expect(response.body).toEqual({ error: "Invalid input data" }); // Changed to match actual response
+    expect(response.body).toEqual({ error: "Invalid input data" }); 
   });
 
   test("Auth test registration with empty email", async () => {
@@ -134,7 +134,7 @@ describe("Auth test suite", () => {
       expect(response.body).toHaveProperty("refreshToken");
     });
 
-    // Verify all tokens are different
+    
     const tokens = responses.map(r => r.body.accessToken);
     const uniqueTokens = new Set(tokens);
     expect(uniqueTokens.size).toBe(tokens.length);
@@ -227,7 +227,7 @@ describe("Auth test suite", () => {
       .post(baseUrl + "/refresh")
       .send({});
     expect(response.statusCode).toBe(400);
-   // expect(response.body).toBe("error");
+   
   });
 
   test("Test token generation with missing TOKEN_SECRET", async () => {
@@ -241,7 +241,7 @@ describe("Auth test suite", () => {
     expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty("error");
 
-    // Restore TOKEN_SECRET
+    
     process.env.TOKEN_SECRET = originalSecret;
   });
 
@@ -301,7 +301,7 @@ describe("Auth test suite", () => {
         refreshToken: "invalid_token"
       });
     expect(response.statusCode).toBe(400);
-   // expect(response.body).toBe("error");
+   
   });
 
   jest.setTimeout(20000);

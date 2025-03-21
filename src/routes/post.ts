@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import postController from "../controllers/post"; // Ensure this import is correct
+import postController from "../controllers/post"; 
 
 /**
  * @swagger
