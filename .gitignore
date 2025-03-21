@@ -6,9 +6,10 @@ storage/
 .env_prod
 .env_dev
 .env_test
-.client-cert2.pem
-.client-key2.pem
-.client2.csr
+.env_local
+client-cert2.pem
+client-key2.pem
+client2.csr
 
 
 
