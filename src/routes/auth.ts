@@ -14,7 +14,7 @@ import authController from "../controllers/auth";
  * components:
  *   securitySchemes:
  *     bearerAuth:
- *       type: https
+ *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
  */
@@ -40,15 +40,12 @@ import authController from "../controllers/auth";
  *         password: '123456'
  */
 
-router.post("/register", (req,res)=>{authController.register(req,res)});
-router.post("/google", (req,res)=>{authController.googleSignIn(req,res)});
-
-
-
+router.post("/register", (req, res) => { authController.register(req, res) });
+router.post("/google", (req, res) => { authController.googleSignIn(req, res) });
 
 /**
  * @swagger
- * /auth/register:
+ * /api/auth/register:
  *   post:
  *     summary: Registers a new user
  *     tags: [Auth]
@@ -96,7 +93,7 @@ router.post("/login", authController.login);
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *   post:
  *     summary: Logs in a user
  *     description: Provide email and password
@@ -122,7 +119,7 @@ router.post("/login", authController.login);
 
 /**
  * @swagger
- * /auth/refreshToken:
+ * /api/auth/refreshToken:
  *   get:
  *     summary: Get a new access token using the refresh token
  *     tags: [Auth]
@@ -146,7 +143,7 @@ router.post("/refresh", authController.refresh);
 
 /**
  * @swagger
- * /auth/logout:
+ * /api/auth/logout:
  *   get:
  *     summary: Logs out a user
  *     tags: [Auth]
@@ -166,7 +163,7 @@ router.post("/logout", authController.logout);
 
 /**
  * @swagger
- * /auth/{id}:
+ * /api/auth/{id}:
  *   put:
  *     summary: Updates a user
  *     tags: [Auth]
@@ -196,11 +193,11 @@ router.post("/logout", authController.logout);
  *         description: User not found
  *       500:
  *         description: Internal server error
+ *     security:
+ *       - bearerAuth: []
  */
 router.put("/:id", (req, res) => {
     authController.updateUser(req, res);
-  });
-  
-
+});
 
 export default router;
