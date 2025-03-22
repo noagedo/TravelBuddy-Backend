@@ -34,7 +34,7 @@ import commentController from "../controllers/comment";
 
 /**
  * @swagger
- * /comments:
+ * /api/comments:
  *   get:
  *     summary: Gets all comments
  *     description: Retrieves all comments
@@ -57,7 +57,7 @@ router.get("/", commentController.getAllComments);
 
 /**
  * @swagger
- * /comments/{postId}:
+ * /api/comments/{postId}:
  *   get:
  *     summary: Gets comments by post ID
  *     description: Retrieves all comments for a specific post
@@ -87,7 +87,7 @@ router.get("/:postId", commentController.getCommentsByPostId);
 
 /**
  * @swagger
- * /comments:
+ * /api/comments:
  *   post:
  *     summary: Creates a new comment
  *     description: Creates a new comment
@@ -131,7 +131,7 @@ router.post("/", commentController.createComment);
 
 /**
  * @swagger
- * /comments/{commentId}:
+ * /api/comments/{commentId}:
  *   put:
  *     summary: Updates a comment
  *     description: Updates a comment by its ID
@@ -167,7 +167,7 @@ router.put("/:commentId", (req,res)=>{commentController.updateComment(req,res)})
 
 /**
  * @swagger
- * /comments/{commentId}:
+ * /api/comments/{commentId}:
  *   delete:
  *     summary: Deletes a comment
  *     description: Deletes a comment by its ID
@@ -193,7 +193,7 @@ router.delete("/:commentId", (req,res)=>{commentController.deleteComment(req,res
 
 /**
  * @swagger
- * /comments:
+ * /api/comments:
  *   delete:
  *     summary: Deletes all comments
  *     description: Removes all comments from the database

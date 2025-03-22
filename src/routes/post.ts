@@ -41,7 +41,7 @@ import postController from "../controllers/post"; // Ensure this import is corre
 
 /**
  * @swagger
- * /posts:
+ * /api/posts:
  *   post:
  *     summary: Adds a new post
  *     description: Adds a new post
@@ -64,7 +64,7 @@ router.post("/", postController.addNewPost); // Ensure this line is correct
 
 /**
  * @swagger
- * /posts:
+ * /api/posts:
  *   get:
  *     summary: Gets all posts
  *     description: Get all posts with pagination
@@ -98,7 +98,7 @@ router.get("/", postController.getAllPosts);
 
 /**
  * @swagger
- * /posts/{postId}:
+ * /api/posts/{postId}:
  *   get:
  *     summary: Gets a specific post by ID
  *     description: Get a specific post by ID
@@ -126,7 +126,7 @@ router.get("/:postId", postController.getPostById);
 
 /**
  * @swagger
- * /posts/sender:
+ * /api/posts/sender:
  *   get:
  *     summary: Gets posts by a specific sender
  *     description: Get posts by sender
@@ -149,7 +149,7 @@ router.get("/sender", postController.getPostBySender);
 
 /**
  * @swagger
- * /posts/{postId}:
+ * /api/posts/{postId}:
  *   put:
  *     summary: Updates a post by ID
  *     description: Update a post by ID
@@ -183,7 +183,7 @@ router.put("/:postId", postController.updatePost);
 
 /**
  * @swagger
- * /posts/{postId}:
+ * /api/posts/{postId}:
  *   delete:
  *     summary: Deletes a post
  *     description: Delete a post by ID
