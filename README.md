@@ -1,15 +1,19 @@
-Our project, TravelBuddy, is a website where people upload experiences from trips around the world.
+# ✈️ Social Network for Travelers – Backend
 
+This is the **backend** of the Social Network for Travelers platform.
 
+The backend handles:
+- User authentication and authorization using **JWT**
+- Post, comment, and like management
+- AI integration for content generation
+- Image upload and storage
+- RESTful API endpoints with comprehensive documentation
 
-for start the enviroment developement - project - npm run dev
-for start the enviroment production - project - npm run prod
-for start the tests - npm run test
+## 🛠️ Technologies Used
 
-
-
-
-
-
-
-
+- **Node.js**
+- **Express**
+- **MongoDB** with **Mongoose**
+- **JWT** for authentication
+- **Jest** for testing
+- **Swagger** for API documentation
